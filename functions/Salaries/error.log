@@ -1,0 +1,112 @@
+[31-Jan-2025 19:30:50 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 11112
+    [month] => 9
+    [year] => 2024
+)
+
+[31-Jan-2025 19:30:50 Europe/Berlin] Checking for salary record: Employee ID: 11112, Month-Year: 09-2024
+[31-Jan-2025 19:30:50 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:30:50 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:30:50 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"11112","month_year":"09-2024","count":0}}
+[31-Jan-2025 19:30:50 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 11112
+    [month] => 9
+    [year] => 2024
+)
+
+[31-Jan-2025 19:30:50 Europe/Berlin] Checking for salary record: Employee ID: 11112, Month-Year: 09-2024
+[31-Jan-2025 19:30:50 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:30:50 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:30:50 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"11112","month_year":"09-2024","count":0}}
+[31-Jan-2025 19:35:01 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 43887
+    [month] => 11
+    [year] => 2024
+)
+
+[31-Jan-2025 19:35:01 Europe/Berlin] Checking for salary record: Employee ID: 43887, Month-Year: 11-2024
+[31-Jan-2025 19:35:01 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:35:01 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:35:01 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"43887","month_year":"11-2024","count":0}}
+[31-Jan-2025 19:35:01 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 43887
+    [month] => 11
+    [year] => 2024
+)
+
+[31-Jan-2025 19:35:01 Europe/Berlin] Checking for salary record: Employee ID: 43887, Month-Year: 11-2024
+[31-Jan-2025 19:35:01 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:35:01 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:35:01 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"43887","month_year":"11-2024","count":0}}
+[31-Jan-2025 19:37:58 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 09383
+    [month] => 10
+    [year] => 2023
+)
+
+[31-Jan-2025 19:37:58 Europe/Berlin] Checking for salary record: Employee ID: 09383, Month-Year: 10-2023
+[31-Jan-2025 19:37:58 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:37:58 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:37:58 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"09383","month_year":"10-2023","count":0}}
+[31-Jan-2025 19:37:58 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 09383
+    [month] => 10
+    [year] => 2023
+)
+
+[31-Jan-2025 19:37:58 Europe/Berlin] Checking for salary record: Employee ID: 09383, Month-Year: 10-2023
+[31-Jan-2025 19:37:58 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:37:58 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:37:58 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"09383","month_year":"10-2023","count":0}}
+[31-Jan-2025 19:41:40 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 11112
+    [month] => 8
+    [year] => 2023
+)
+
+[31-Jan-2025 19:41:40 Europe/Berlin] Checking for salary record: Employee ID: 11112, Month-Year: 08-2023
+[31-Jan-2025 19:41:40 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:41:40 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:41:40 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"11112","month_year":"08-2023","count":0}}
+[31-Jan-2025 19:41:40 Europe/Berlin] Received POST data in check-salary-exists.php: Array
+(
+    [employee_id] => 11112
+    [month] => 8
+    [year] => 2023
+)
+
+[31-Jan-2025 19:41:40 Europe/Berlin] Checking for salary record: Employee ID: 11112, Month-Year: 08-2023
+[31-Jan-2025 19:41:40 Europe/Berlin] Executing query: SELECT COUNT(*) FROM salary_details 
+              WHERE employee_id = :employee_id 
+              AND month_year = :month_year 
+              AND status = 'Active'
+[31-Jan-2025 19:41:40 Europe/Berlin] Found 0 matching records
+[31-Jan-2025 19:41:40 Europe/Berlin] Sending response: {"exists":false,"success":true,"debug":{"employee_id":"11112","month_year":"08-2023","count":0}}
