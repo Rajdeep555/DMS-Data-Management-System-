@@ -35,7 +35,7 @@ $sql->execute();
 $total_rows = $sql->fetchColumn();
 $total_pages = ceil($total_rows / $no_of_records_per_page);
 
-$select_enquiry = "SELECT * FROM `$table_name` WHERE status = 'Active' 
+$select_enquiry = "SELECT DISTINCT user_role FROM `$table_name` WHERE status = 'Active' 
     ORDER BY $designation_order, id DESC LIMIT $offset, $no_of_records_per_page";
 $sql = $dbconn->prepare($select_enquiry);
 $sql->execute();

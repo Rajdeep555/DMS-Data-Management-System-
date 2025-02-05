@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
     $error = "error";
   } else {
 
-    $password = md5($field6);
+    $password = md5($field7);
 
     //File Upload Codes Starts Here
     //1st 
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
         $sql1 = ($photo1 != '') ? " user_image='$photo1' " . ',' : '';
       }
     }
-    if ($field6 == $field7) {
+    if ($field7 == $field8) {
 
       $insert_bookings = "INSERT `$table_name` SET
     $sql1
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     user_lname          = '" . addslashes($field3) . "', 
     user_role           = '" . addslashes($field5) . "',
     user_password       = '" . addslashes($password) . "', 
-    user_email          = '" . addslashes($field9) . "',   
+    user_email          = '" . addslashes($field4) . "',   
     user_phone          = '" . addslashes($field10) . "', 
     user_country        = '" . addslashes($field11) . "',   
     user_state          = '" . addslashes($field12) . "',
@@ -103,8 +103,8 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
 
 <script>
   function matchPassword() {
-    var pw1 = document.getElementById("field6").value;
-    var pw2 = document.getElementById("field7").value;
+    var pw1 = document.getElementById("field7").value;
+    var pw2 = document.getElementById("field8").value;
 
 
     if (pw1 != pw2) {
@@ -117,6 +117,10 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
   :focus {
     outline: 0 !important;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+  }
+
+  ::placeholder {
+    color: rgb(188, 184, 183) !important;
   }
 </style>
 
@@ -141,16 +145,16 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
               <div class="accordion-item border mb-2">
                 <h2 class="accordion-header" id="panelsStayOpen-headingFour">
                   <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour" style="background-color:#e3dfde;color:black;">
-                    User ID Generate
+                    Employee ID Generate
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
                   <div class="accordion-body">
                     <div class="row mb-4">
                       <div class="col-md-12">
-                        <label><strong>ID (5 characters consisting of digits or alphabets or both)</strong> <span style="color:red;">*</span></label>
-                        <input class="form-control" name="field16" type="text" placeholder="Unique Employee ID" pattern="[a-zA-Z0-9]{5}" required>
-                        <?php if ($errormessage) { ?><span class="text-danger"><?php echo $errormessage; ?></span><?php } ?>
+                        <label><strong>Employee ID (Eg. MCI/0122/100)</strong> </label>
+                        <input class="form-control" name="field16" type="text" placeholder="Unique Employee ID" required>
+                        <?php if ($errormessage) { ?><span class=" text-danger"><?php echo $errormessage; ?></span><?php } ?>
                       </div>
                     </div>
                   </div>
@@ -166,7 +170,7 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                   <div class="accordion-body">
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>First Name</strong> <span style="color:red;">*</span></label>
+                        <label><strong>First Name</strong> </label>
                         <input class="form-control" name="field1" type="text" placeholder="First Name" required>
                       </div>
                       <div class="col-md-3">
@@ -174,21 +178,28 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                         <input class="form-control" name="field2" type="text" placeholder="Middle Name">
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Last Name</strong> <span style="color:red;">*</span></label>
+                        <label><strong>Last Name</strong> </label>
                         <input class="form-control" name="field3" type="text" placeholder="Last Name" required>
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Upload Photo</strong></label>
-                        <input class="form-control" name="photo1" type="file">
+                        <label><strong>Gender</strong> </label>
+                        <div>
+                          <label>
+                            <input type="radio" name="gender" value="male" required> Male
+                          </label>
+                          <label>
+                            <input type="radio" name="gender" value="female" required> Female
+                          </label>
+                        </div>
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>User Role</strong> <span style="color:red;">*</span></label>
+                        <label><strong>Designation</strong> </label>
                         <select class="form-select" name="field5" aria-label="Default select example" required>
                           <option selected disabled>Select User Role</option>
                           <?php
-                          $select_bookings = "SELECT * FROM `groups` where status = 'Active'";
+                          $select_bookings = "SELECT * FROM `groups` where status = 'Active' ORDER BY id ASC";
                           $sql11 = $dbconn->prepare($select_bookings);
                           $sql11->execute();
                           $wlvd11 = $sql11->fetchAll(PDO::FETCH_OBJ);
@@ -205,75 +216,111 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                         </select>
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Password</strong> <span style="color:red;">*</span></label>
-                        <input class="form-control" name="field6" type="text" placeholder="Enter Password" id="field6" required>
+                        <label><strong>Department</strong> </label>
+                        <input class="form-control" name="field6" type="text" placeholder="Enter Department" required>
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Confirm Password</strong> <span style="color:red;">*</span></label>
-                        <input class="form-control" name="field7" type="text" id="field7" placeholder="Enter Confirm Password" required>
+                        <label><strong>Login Password</strong> </label>
+                        <input class="form-control" name="field7" type="text" placeholder="Enter Password" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Confirm Password</strong> </label>
+                        <input class="form-control" name="field8" type="text" placeholder="Enter Confirm Password" required>
+                      </div>
+                    </div>
+
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Date of Birth</strong></label>
+                        <input class="form-control" name="field9" type="date" placeholder="Date of Birth">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Date of Joining</strong></label>
+                        <input class="form-control" name="field10" type="date" placeholder="Date of Joining">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Date of Confirmation</strong></label>
+                        <input class="form-control" name="field11" type="date" placeholder="Date of Confirmation">
                       </div>
 
+                      <div class="col-md-3">
+                        <label><strong>Date of Relieving</strong></label>
+                        <input class="form-control" name="field12" type="date" placeholder="Date of Relieving">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="accordion-item border mb-2">
-                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="background-color:#e3dfde;color:black;">
+                <h2 class="accordion-header" id="panelsStayOpen-headingReporting">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseReporting" aria-expanded="false" aria-controls="panelsStayOpen-collapseReporting" style="background-color:#e3dfde;color:black;">
+                    Reporting Informations
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseReporting" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingReporting">
+                  <div class="accordion-body">
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Immediate Reporting</strong> </label>
+                        <input class="form-control" name="immediate_reporting" type="text" placeholder="Immediate Reporting" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Reporting Manager</strong> </label>
+                        <input class="form-control" name="reporting_manager" type="text" placeholder="Reporting Manager" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item border mb-2">
+                <h2 class="accordion-header" id="panelsStayOpen-headingContact">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseContact" aria-expanded="false" aria-controls="panelsStayOpen-collapseContact" style="background-color:#e3dfde;color:black;">
                     Contact Informations
                   </button>
                 </h2>
-                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+                <div id="panelsStayOpen-collapseContact" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingContact">
                   <div class="accordion-body">
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>Email</strong> <span style="color:red;">*</span></label>
-                        <input class="form-control" name="field9" type="email" placeholder="Enter Email" required>
+                        <label><strong>Official Email ID</strong></label>
+                        <input class="form-control" name="official_email" type="email" placeholder="Enter Email">
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Phone</strong> <span style="color:red;">*</span></label>
-                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone" pattern="[0-9]{10}" required>
+                        <label><strong>Personal Email ID</strong></label>
+                        <input class="form-control" name="personal_email" type="email" placeholder="Enter Email">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label><strong>Address for Communication (With Pincode)</strong></label>
+                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item border mb-2">
-                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="background-color:#e3dfde;color:black;">
-                    Address
-                  </button>
-                </h2>
-                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
-                  <div class="accordion-body">
                     <div class="row mb-4">
-                      <div class="col-md-3">
-                        <label><strong>Country</strong></label>
-                        <select onclick="showState(this.value)" onchange="showState(this.value)" class="form-select" name="field11">
-                          <?php foreach ($wlvd12 as $row12) { ?>
-                            <option value="<?= $row12->id ?>" <?php if ($row12->countries_name === 'India') echo 'selected'; ?>>
-                              <?= $row12->countries_name; ?>
-                            </option>
-                          <?php } ?>
-                        </select>
-
-
+                      <div class="col-md-5">
+                        <label><strong>Permanent Address (With Pincode)</strong></label>
+                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
                       </div>
                       <div class="col-md-3">
-                        <label><strong>State</strong> <span style="color:red;">*</span></label>
-                        <select class="form-select" name="field12" type="text" id="relatedState" onchange="showCity(this.value)" required>
-                          <option>Select State</option>
-                        </select>
+                        <label><strong>Contact No. - Mobile</strong> </label>
+                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone" pattern="[0-9]{10}" required>
                       </div>
-                      <div class="col-md-3">
-                        <label><strong>City</strong> <span style="color:red;">*</span></label>
-                        <select class="form-select" name="field13" type="text" id="relatedCity" required>
-                          <option>Select City</option>
-                        </select>
+                      <div class="col-md-4">
+                        <label><strong>Contact No. - Landline (Area Code)</strong></label>
+                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone">
                       </div>
-                      <div class="col-md-3">
-                        <label><strong>Address</strong><span style="color:red;">*</span> </label>
-                        <input class="form-control" name="field14" type="text" placeholder="" required>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-5">
+                        <label><small style="font-weight: 600;">Contact Person's Name ( In case of emergency )</small></label>
+                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
+                      </div>
+                      <div class="col-md-2">
+                        <label><strong>Relation</strong></label>
+                        <input class="form-control" name="field10" type="text" placeholder="Relation">
+                      </div>
+                      <div class="col-md-5">
+                        <label><strong>Contact No. - (In case of emergency)</strong></label>
+                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone">
                       </div>
                     </div>
                   </div>
@@ -281,71 +328,238 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
               </div>
 
               <!--others -->
-              <!-- <div class="accordion-item border mb-2">
-                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="background-color:#e3dfde;color:black;">
-                    Other Information
+              <div class="accordion-item border mb-2">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOtherInfo">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOtherInfo" aria-expanded="false" aria-controls="panelsStayOpen-collapseOtherInfo" style="background-color:#e3dfde;color:black;">
+                    Additional Information - 01
                   </button>
                 </h2>
-                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+                <div id="panelsStayOpen-collapseOtherInfo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOtherInfo">
                   <div class="accordion-body">
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>Business Unit</strong><span style="color:red;">*</span></label>
-                        <input type="text" name="business_unit" class="form-control" required>
+                        <label><strong>Blood Group</strong></label>
+                        <select name="blood_group" class="form-select" required>
+                          <option value="" disabled selected>Select Blood Group</option>
+                          <option value="A+">A+</option>
+                          <option value="A-">A-</option>
+                          <option value="B+">B+</option>
+                          <option value="B-">B-</option>
+                          <option value="AB+">AB+</option>
+                          <option value="AB-">AB-</option>
+                          <option value="O+">O+</option>
+                          <option value="O-">O-</option>
+                        </select>
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Cost Center</strong> <span style="color:red;">*</span></label>
-                        <input type="text" name="cost_center" class="form-control" required>
+                        <label><strong>Qualification</strong> </label>
+                        <input type="text" name="qualification" class="form-control" required>
                       </div>
                       <div class="col-md-3">
-                        <label><strong>Date of Join</strong> <span style="color:red;">*</span></label>
-                        <input type="date" name="date_join" class="form-control" required>
+                        <label><strong>Specialization</strong> </label>
+                        <input type="text" name="specialization" class="form-control" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Certification (if any)</strong></label>
+                        <input type="text" name="certification" class="form-control">
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-4">
+                        <label><strong>Previous Company Worked in</strong> </label>
+                        <input type="text" name="previous_company" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                        <label><small style="font-weight: 600;">Total Years of Exp. in previous company</small></label>
+                        <input type="text" name="total_years_of_exp" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                        <label><strong>Total Work Experience</strong></label>
+                        <input type="text" name="total_work_experience" class="form-control">
                       </div>
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
 
-              <!--bank details -->
-              <!-- <div class="accordion-item border mb-2">
-                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="background-color:#e3dfde;color:black;">
+
+              <!-- bank details -->
+              <div class="accordion-item border mb-2">
+                <h2 class="accordion-header" id="panelsStayOpen-headingAddress">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseAddress" aria-expanded="false" aria-controls="panelsStayOpen-collapseAddress" style="background-color:#e3dfde;color:black;">
                     Bank Details
-                    (Optional)
                   </button>
                 </h2>
-                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+                <div id="panelsStayOpen-collapseAddress" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingAddress">
                   <div class="accordion-body">
                     <div class="row mb-4">
-                      <div class="col-md-3">
+                      <div class="col-md-4">
+                        <label><strong>Bank Account No.</strong></label>
+                        <input type="text" name="bank_account_no" class="form-control">
+                      </div>
+                      <div class="col-md-4">
                         <label><strong>Bank Name</strong></label>
                         <input type="text" name="bank_name" class="form-control">
                       </div>
-                      <div class="col-md-3">
-                        <label><strong>Bank A/C No.</strong> </label>
-                        <input type="text" name="bank_ac_no" class="form-control">
-                      </div>
-                      <div class="col-md-3">
-                        <label><strong>PF No.</strong> </label>
-                        <input type="text" name="pf_no" class="form-control">
-                      </div>
-                      <div class="col-md-3">
-                        <label><strong>UAN No.</strong> </label>
-                        <input type="text" name="uan_no" class="form-control">
-                      </div>
-                      <div class="col-md-3 mt-3">
-                        <label><strong>ESI No.</strong> </label>
-                        <input type="text" name="esi_no" class="form-control">
-                      </div>
-                      <div class="col-md-3 mt-3">
-                        <label><strong>PAN No.</strong> </label>
-                        <input type="text" name="pan_no" class="form-control">
+                      <div class="col-md-4">
+                        <label><strong>Bank Branch</strong></label>
+                        <input type="text" name="bank_branch" class="form-control">
                       </div>
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
+
+              <!-- additional info 02 -->
+              <div class="accordion-item border mb-2">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOtherInfo">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOtherInfo" aria-expanded="false" aria-controls="panelsStayOpen-collapseOtherInfo" style="background-color:#e3dfde;color:black;">
+                    Additional Information - 02
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOtherInfo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOtherInfo">
+                  <div class="accordion-body">
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>PAN No.</strong> </label>
+                        <input type="text" name="pan_no" class="form-control" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Driving License No.</strong> </label>
+                        <input type="text" name="driving_license_no" class="form-control" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>PF No.</strong></label>
+                        <input type="text" name="pf_no" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Passport No.</strong></label>
+                        <input type="text" name="passport_no" class="form-control">
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Passport Issued at</strong></label>
+                        <input type="time" name="passport_issued_at" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Passport Issued Date</strong></label>
+                        <input type="date" name="passport_issued_date" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Passport Expired Date</strong></label>
+                        <input type="date" name="passport_expired_date" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- additional info 02 ends -->
+
+              <!-- additional info 02 -->
+              <div class="accordion-item border mb-2">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOtherInfo">
+                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOtherInfo" aria-expanded="false" aria-controls="panelsStayOpen-collapseOtherInfo" style="background-color:#e3dfde;color:black;">
+                    Additional Information - 03
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOtherInfo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOtherInfo">
+                  <div class="accordion-body">
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Father's Name</strong> </label>
+                        <input type="text" name="father_name" class="form-control" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Mother's Name</strong> </label>
+                        <input type="text" name="mother_name" class="form-control" required>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Marital Status</strong> </label>
+                        <select name="marital_status" class="form-select" required>
+                          <option value="" disabled selected>Select Marital Status</option>
+                          <option value="single">Single</option>
+                          <option value="married">Married</option>
+                          <option value="divorced">Divorced</option>
+                          <option value="widowed">Widowed</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Spouse's Name</strong></label>
+                        <input type="text" name="pf_no" class="form-control">
+                      </div>
+
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Child Name 1</strong></label>
+                        <input type="text" name="passport_no" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Gender</strong> </label>
+                        <div>
+                          <label>
+                            <input type="radio" name="gender" value="male" required> Male
+                          </label>
+                          <label>
+                            <input type="radio" name="gender" value="female" required> Female
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Child Name 2</strong></label>
+                        <input type="text" name="child_name_2" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Gender</strong> </label>
+                        <div>
+                          <label>
+                            <input type="radio" name="gender" value="male" required> Male
+                          </label>
+                          <label>
+                            <input type="radio" name="gender" value="female" required> Female
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <label><strong>Child Name 3</strong></label>
+                        <input type="text" name="passport_no" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Gender</strong> </label>
+                        <div>
+                          <label>
+                            <input type="radio" name="gender" value="male" required> Male
+                          </label>
+                          <label>
+                            <input type="radio" name="gender" value="female" required> Female
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Child Name 4</strong></label>
+                        <input type="text" name="child_name_2" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label><strong>Gender</strong> </label>
+                        <div>
+                          <label>
+                            <input type="radio" name="gender" value="male" required> Male
+                          </label>
+                          <label>
+                            <input type="radio" name="gender" value="female" required> Female
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- additional info 02 ends -->
+
+
             </div>
           </div>
       </div>
