@@ -6,7 +6,8 @@ session_start();
 $table_name = 'salary_details';
 $redirection_page = "index.php?module=Salaries&view=List";
 $action_name = "module=Salaries&view=List";
-
+$user_role = $_SESSION['user_role'];
+// echo $user_role . "==============";
 // For Displaying the table
 
 if (isset($_GET['pageno'])) {
@@ -166,7 +167,11 @@ if (isset($_GET['sid'])) {
                     <nav style="font-size:20px;">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
                             <a class="nav-item nav-link btn btn-lg " href="index.php?module=Salaries&view=List" aria-selected="true">Salary Details</a>
-                            <a class="nav-item nav-link active btn btn-lg  text-primary" href="index.php?module=Salaries&view=Select-Employee" aria-selected="false"><i class="material-icons" style="font-size:12px;">&nbsp;&nbsp;&nbsp;add</i>Add Salary</a>
+                            <?php if ($_SESSION['user_role'] == 'Admin'): ?>
+                                <a class="nav-item nav-link btn btn-lg text-primary" href="index.php?module=Salaries&view=Select-Employee" aria-selected="false">
+                                    <i class="material-icons" style="font-size:12px;">&nbsp;&nbsp;&nbsp;add</i>Add Salary
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </nav>
                 </div>

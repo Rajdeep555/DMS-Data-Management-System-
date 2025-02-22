@@ -5,7 +5,7 @@ $redirection_page = "index.php?module=Users&view=List";
 $id = $_GET['id'];
 
 $delete_statement = "UPDATE `$table_name` SET
-user_status   = 'INACTIVE',
+-- user_status   = 'INACTIVE',
    status   = 'Inactive'
    where id='".$id."'";   
   

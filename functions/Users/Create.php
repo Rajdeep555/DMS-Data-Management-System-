@@ -1,35 +1,102 @@
 <?php
+// Enable error reporting
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 $table_name = 'users';
 $redirection_page = "index.php?module=Users&view=List";
-$id = $_GET['id'];
+// $id = $_GET['id'];
+
+$errormessage = "";
+
+
+
+
+function generateUserOptions($dbconn, $role)
+{
+  $options = "";
+  $sql = "SELECT user_unique_id, user_fname, user_mname, user_lname FROM users WHERE user_role = :role AND status = 'Active'";
+
+  $stmt = $dbconn->prepare($sql);
+  $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+  $stmt->execute();
+  $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  if (count($users) > 0) {
+    foreach ($users as $row) {
+      $fullName = trim("{$row['user_fname']} {$row['user_mname']} {$row['user_lname']}");
+      $options .= "<option value='{$row['user_unique_id']}'>{$fullName}</option>";
+    }
+  } else {
+    $options = "<option value=''>No Active Users</option>";
+  }
+
+  return $options;
+}
 
 
 // For Submitting The Form
 
 if (isset($_POST['submit'])) {
+  $user_unique_id = $_POST['user_unique_id'];
+  $field1     =  $_POST['field1']; // First Name
+  $field2     =  $_POST['field2']; // Middle Name
+  $field3     =  $_POST['field3']; // Last Name
+  $field4     =  $_POST['field4']; // Gender
+  $field5     =  $_POST['field5']; // Designation
+  $field6     =  $_POST['field6']; // Department
+  $field7     =  $_POST['field7']; // Login Password
+  $field8     =  $_POST['field8']; // Confirm Password
+  $field9     =  $_POST['field9']; // Date of Birth
+  $field10    =  $_POST['field10']; // Date of Joining
+  $field11    =  $_POST['field11']; // Date of Confirmation
+  $field12    =  $_POST['field12']; // Date of Relieving
+  $field13    =  $_POST['field13']; // Immediate Reporting
+  $field14    =  $_POST['field14']; // Reporting Manager
+  $field15    =  $_POST['field15']; // Official Email ID
+  $field16    =  $_POST['field16']; // Personal Email ID
+  $field17    =  $_POST['field17']; // Address for Communication
+  $field18    =  $_POST['field18']; // Permanent Address
+  $field19    =  $_POST['field19']; // Contact No. - Mobile
+  $field20    =  $_POST['field20']; // Contact No. - Landline
+  $field21    =  $_POST['field21']; // Contact Person's Name
+  $field22    =  $_POST['field22']; // Relation
+  $field23    =  $_POST['field23']; // Contact No. - (In case of emergency)
+  $field24    =  $_POST['field24']; // Blood Group
+  $field25    =  $_POST['field25']; // Qualification
+  $field26    =  $_POST['field26']; // Specialization
+  $field27    =  $_POST['field27']; // Certification
+  $field28    =  $_POST['field28']; // Previous Company Worked in
+  $field29    =  $_POST['field29']; // Total Years of Experience
+  $field30    =  $_POST['field30']; // Total Work Experience
+  $field31    =  $_POST['field31']; // Bank Account No.
+  $field32    =  $_POST['field32']; // Bank Name
+  $field33    =  $_POST['field33']; // Bank Branch
+  $field34    =  $_POST['field34']; // PAN No.
+  $field35    =  $_POST['field35']; // Driving License No.
+  $field36    =  $_POST['field36']; // PF No.
+  $field37    =  $_POST['field37']; // Passport No.
+  $field38    =  $_POST['field38']; // Passport Issued at
+  $field39    =  $_POST['field39']; // Passport Issued Date
+  $field40    =  $_POST['field40']; // Passport Expired Date
+  $field41    =  $_POST['field41']; // Father's Name
+  $field42    =  $_POST['field42']; // Mother's Name
+  $field43    =  $_POST['field43']; // Marital Status
+  $field44    =  $_POST['field44']; // Spouse's Name
+  $field45    =  $_POST['field45']; // Child Name 1
+  $field46    =  $_POST['field46']; // Child Name 2
+  $field47    =  $_POST['field47']; // Child Name 3
+  $field48    =  $_POST['field48']; // Child Name 4
+  $field49    =  $_POST['field49']; // Child Name 5
+  $field50    =  $_POST['field50']; // Child Name 6
+  $field51    =  $_POST['field51']; // Child Name 7
+  $field52    =  $_POST['field52']; // Child Name 8
 
-  $field1     =  $_POST['field1'];
-  $field2     =  $_POST['field2'];
-  $field3     =  $_POST['field3'];
-  $field4     =  $_POST['field4'];
-  $field5     =  $_POST['field5'];
-  $field6     =  $_POST['field6'];
-  $field7     =  $_POST['field7'];
-  $field8     =  $_POST['field8'];
-  $field9     =  $_POST['field9'];
-  $field10    =  $_POST['field10'];
-  $field11    =  $_POST['field11'];
-  $field12    =  $_POST['field12'];
-  $field13    =  $_POST['field13'];
-  $field14    =  $_POST['field14'];
-
-
-  // if (isset($_POST["field15"])) {
-  //   $covering_area = implode(',', $_POST["field15"]);
-  // }
-
-  $field16    =  $_POST['field16'];
+  $field53    =  $_POST['gm']; //gm 
+  $field54    =  $_POST['agm']; //dgm
+  $field55    =  $_POST['rsm']; //rsm
+  $field56    =  $_POST['asm']; //asm
+  $field57    =  $_POST['tsm']; //tsmx
 
   $select_enquiry121 = "SELECT * FROM `users` where status = 'Active' AND user_unique_id='$field16'";
   $sql121 = $dbconn->prepare($select_enquiry121);
@@ -62,21 +129,65 @@ if (isset($_POST['submit'])) {
     if ($field7 == $field8) {
 
       $insert_bookings = "INSERT `$table_name` SET
-    $sql1
-    user_unique_id      = '" . addslashes($field16) . "',   
-    user_fname          = '" . addslashes($field1) . "',   
-    user_mname          = '" . addslashes($field2) . "',
-    user_lname          = '" . addslashes($field3) . "', 
-    user_role           = '" . addslashes($field5) . "',
-    user_password       = '" . addslashes($password) . "', 
-    user_email          = '" . addslashes($field4) . "',   
-    user_phone          = '" . addslashes($field10) . "', 
-    user_country        = '" . addslashes($field11) . "',   
-    user_state          = '" . addslashes($field12) . "',
-    user_city           = '" . addslashes($field13) . "', 
-    user_address        = '" . addslashes($field14) . "',
-    status              = 'Active'";
-
+      $sql1
+      user_unique_id      = '" . addslashes($user_unique_id) . "',   
+      user_fname          = '" . addslashes($field1) . "',   
+      user_mname          = '" . addslashes($field2) . "',
+      user_lname          = '" . addslashes($field3) . "', 
+      user_gender         = '" . addslashes($field4) . "',
+      user_role           = '" . addslashes($field5) . "',
+      user_department     = '" . addslashes($field6) . "',
+      user_password       = '" . addslashes($password) . "', 
+      dob                 = '" . addslashes($field9) . "',
+      doj                 = '" . addslashes($field10) . "',
+      doc                 = '" . addslashes($field11) . "',
+      dor                 = '" . addslashes($field12) . "',
+      immediate_reporting = '" . addslashes($field13) . "',
+      reporting_manager   = '" . addslashes($field14) . "',
+      official_email      = '" . addslashes($field15) . "',
+      personal_email      = '" . addslashes($field16) . "',
+      afc                 = '" . addslashes($field17) . "',
+      permanent_address   = '" . addslashes($field18) . "',
+      user_phone          = '" . addslashes($field19) . "',
+      landline            = '" . addslashes($field20) . "',
+      contact_per_emergency = '" . addslashes($field21) . "',
+      emergency_relation  = '" . addslashes($field22) . "',
+      emergency_p_num     = '" . addslashes($field23) . "',
+      blood_group         = '" . addslashes($field24) . "',
+      qualification       = '" . addslashes($field25) . "',
+      specialization      = '" . addslashes($field26) . "',
+      certification       = '" . addslashes($field27) . "',
+      previous_company    = '" . addslashes($field28) . "',
+      total_years_of_exp     = '" . addslashes($field29) . "',
+      total_work_experience      = '" . addslashes($field30) . "',
+      bank_account_no     = '" . addslashes($field31) . "',
+      bank_name           = '" . addslashes($field32) . "',
+      bank_branch         = '" . addslashes($field33) . "',
+      pan_no              = '" . addslashes($field34) . "',
+      driving_license_no  = '" . addslashes($field35) . "',
+      pf_no               = '" . addslashes($field36) . "',
+      passport_no         = '" . addslashes($field37) . "',
+      passport_issued_at  = '" . addslashes($field38) . "',
+      passport_issued_date = '" . addslashes($field39) . "',
+      passport_expired_date = '" . addslashes($field40) . "',
+      father_name         = '" . addslashes($field41) . "',
+      mother_name         = '" . addslashes($field42) . "',
+      marital_status      = '" . addslashes($field43) . "',
+      spouse_name         = '" . addslashes($field44) . "',
+      child_one         = '" . addslashes($field45) . "',
+      child_one_gender         = '" . addslashes($field49) . "',
+      child_two         = '" . addslashes($field46) . "',
+      child_two_gender         = '" . addslashes($field50) . "',
+      child_three         = '" . addslashes($field47) . "',
+      child_three_gender         = '" . addslashes($field51) . "',
+      child_four         = '" . addslashes($field48) . "',
+      child_four_gender         = '" . addslashes($field52) . "',
+      gm         = '" . addslashes($field53) . "',
+      dgm         = '" . addslashes($field54) . "',
+      rsm         = '" . addslashes($field55) . "',
+      asm         = '" . addslashes($field56) . "',
+      tsm         = '" . addslashes($field57) . "',
+      status              = 'Active'";
 
       $sql_insert = $dbconn->prepare($insert_bookings);
       $sql_insert->execute();
@@ -85,8 +196,9 @@ if (isset($_POST['submit'])) {
       $message = "Details successfully updated.";
       $status = "success";
       if ($myid) {
-
+        // Redirect to avoid form resubmission
         header("Location: $redirection_page&sid=$myid");
+        exit(); // Ensure no further code is executed after the redirect
       } else {
         echo 'error';
       }
@@ -153,7 +265,7 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-12">
                         <label><strong>Employee ID (Eg. MCI/0122/100)</strong> </label>
-                        <input class="form-control" name="field16" type="text" placeholder="Unique Employee ID" required>
+                        <input class="form-control" name="user_unique_id" type="text" placeholder="Unique Employee ID" required>
                         <?php if ($errormessage) { ?><span class=" text-danger"><?php echo $errormessage; ?></span><?php } ?>
                       </div>
                     </div>
@@ -170,8 +282,8 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                   <div class="accordion-body">
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>First Name</strong> </label>
-                        <input class="form-control" name="field1" type="text" placeholder="First Name" required>
+                        <label><strong>First Name</strong></label>
+                        <input class="form-control" name="field1" type="text" placeholder="First Name">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Middle Name</strong></label>
@@ -179,37 +291,44 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                       </div>
                       <div class="col-md-3">
                         <label><strong>Last Name</strong> </label>
-                        <input class="form-control" name="field3" type="text" placeholder="Last Name" required>
+                        <input class="form-control" name="field3" type="text" placeholder="Last Name">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Gender</strong> </label>
                         <div>
                           <label>
-                            <input type="radio" name="gender" value="male" required> Male
+                            <input type="radio" name="field4" value="male"> Male
                           </label>
                           <label>
-                            <input type="radio" name="gender" value="female" required> Female
+                            <input type="radio" name="field4" value="female"> Female
                           </label>
                         </div>
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-3">
-                        <label><strong>Designation</strong> </label>
-                        <select class="form-select" name="field5" aria-label="Default select example" required>
+                        <label><strong>Designation</strong></label>
+                        <select class="form-select" id="designationSelect" name="field5" aria-label="Default select example">
                           <option selected disabled>Select User Role</option>
                           <?php
-                          $select_bookings = "SELECT * FROM `groups` where status = 'Active' ORDER BY id ASC";
+                          $select_bookings = "SELECT * FROM `groups` WHERE status = 'Active' ORDER BY id ASC";
                           $sql11 = $dbconn->prepare($select_bookings);
                           $sql11->execute();
                           $wlvd11 = $sql11->fetchAll(PDO::FETCH_OBJ);
                           if ($sql11->rowCount() > 0) {
                             foreach ($wlvd11 as $rows11) {
-                              $user_grp_id = $rows11->id;
                               $user_grp_name = $rows11->user_grp_name;
+                              if (
+                                $user_grp_name !== 'Assistant Vice Pesident(SM)' &&
+                                $user_grp_name !== 'Deputy Vice President(SM)' &&
+                                $user_grp_name !== 'Vice President(Sales & Marketing)'
+                              ) {
                           ?>
-                              <option value="<?php echo $user_grp_name; ?>"><?php echo $user_grp_name; ?></option>
+                                <option value="<?= htmlspecialchars($user_grp_name); ?>">
+                                  <?= htmlspecialchars($user_grp_name); ?>
+                                </option>
                           <?php
+                              }
                             }
                           }
                           ?>
@@ -217,35 +336,53 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                       </div>
                       <div class="col-md-3">
                         <label><strong>Department</strong> </label>
-                        <input class="form-control" name="field6" type="text" placeholder="Enter Department" required>
+                        <select class="form-select" name="field6" aria-label="Select Department">
+                          <option selected disabled>Select Department</option>
+                          <?php
+                          // Query to select departments from the database
+                          $select_departments = "SELECT * FROM `departments` WHERE status = 'Active' ORDER BY id ASC";
+                          $sql_departments = $dbconn->prepare($select_departments);
+                          $sql_departments->execute();
+                          $departments = $sql_departments->fetchAll(PDO::FETCH_OBJ);
+
+                          // Loop through the results and create options
+                          foreach ($departments as $department) {
+                            echo '<option value="' . htmlspecialchars($department->dept_name) . '">' . htmlspecialchars($department->dept_name) . '</option>';
+                          }
+                          ?>
+                        </select>
                       </div>
                       <div class="col-md-3">
                         <label><strong>Login Password</strong> </label>
-                        <input class="form-control" name="field7" type="text" placeholder="Enter Password" required>
+                        <input class="form-control" name="field7" type="text" placeholder="Enter Password">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Confirm Password</strong> </label>
-                        <input class="form-control" name="field8" type="text" placeholder="Enter Confirm Password" required>
+                        <input class="form-control" name="field8" type="password" placeholder="Enter Confirm Password">
                       </div>
                     </div>
 
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>Date of Birth</strong></label>
-                        <input class="form-control" name="field9" type="date" placeholder="Date of Birth">
+                        <input class="form-control" name="field9" type="date">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Date of Joining</strong></label>
-                        <input class="form-control" name="field10" type="date" placeholder="Date of Joining">
+                        <input class="form-control" name="field10" type="date">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Date of Confirmation</strong></label>
-                        <input class="form-control" name="field11" type="date" placeholder="Date of Confirmation">
+                        <input class="form-control" name="field11" type="date">
                       </div>
 
                       <div class="col-md-3">
                         <label><strong>Date of Relieving</strong></label>
-                        <input class="form-control" name="field12" type="date" placeholder="Date of Relieving">
+                        <input class="form-control" name="field12" type="date">
+                      </div>
+                      <div class="col-md-3 mt-3">
+                        <label><strong>Profile Photo</strong></label>
+                        <input class="form-control" name="photo1" type="file">
                       </div>
                     </div>
                   </div>
@@ -260,13 +397,51 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                 <div id="panelsStayOpen-collapseReporting" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingReporting">
                   <div class="accordion-body">
                     <div class="row mb-4">
+                      <div class="col-md-3" id="gmDiv">
+                        <label><strong>Select GM</strong></label>
+                        <select class="form-control" name="gm">
+                          <option value="">Select GM</option>
+                          <?= generateUserOptions($dbconn, 'General Manger'); ?>
+                        </select>
+                      </div>
+                      <div class="col-md-3" id="dgmDiv">
+                        <label><strong>Select DGM</strong></label>
+                        <select class="form-control" name="dgm">
+                          <option value="">Select DGM</option>
+                          <?= generateUserOptions($dbconn, 'Deputy General Manager'); ?>
+                        </select>
+                      </div>
+                      <div class="col-md-3" id="rsmDiv">
+                        <label><strong>Select RSM</strong></label>
+                        <select class="form-control" name="rsm">
+                          <option value="">Select RSM</option>
+                          <?= generateUserOptions($dbconn, 'Regional Sales Manager'); ?>
+                        </select>
+                      </div>
+                      <div class="col-md-3" id="asmDiv">
+                        <label><strong>Select ASM</strong></label>
+                        <select class="form-control" name="asm">
+                          <option value="">Select ASM</option>
+                          <?= generateUserOptions($dbconn, 'Area Sales Manager'); ?>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row mb-4">
+                      <div class="col-md-3" id="tsmDiv">
+                        <label><strong>Select TSM</strong></label>
+                        <select class="form-control" name="tsm">
+                          <option value="">Select TSM</option>
+                          <?= generateUserOptions($dbconn, 'Territory Sales Manager'); ?>
+                        </select>
+                      </div>
                       <div class="col-md-3">
                         <label><strong>Immediate Reporting</strong> </label>
-                        <input class="form-control" name="immediate_reporting" type="text" placeholder="Immediate Reporting" required>
+                        <input class="form-control" name="field13" type="text" placeholder="Immediate Reporting">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Reporting Manager</strong> </label>
-                        <input class="form-control" name="reporting_manager" type="text" placeholder="Reporting Manager" required>
+                        <input class="form-control" name="field14" type="text" placeholder="Reporting Manager">
                       </div>
                     </div>
                   </div>
@@ -283,44 +458,44 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>Official Email ID</strong></label>
-                        <input class="form-control" name="official_email" type="email" placeholder="Enter Email">
+                        <input class="form-control" name="field15" type="email" placeholder="Enter Email">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Personal Email ID</strong></label>
-                        <input class="form-control" name="personal_email" type="email" placeholder="Enter Email">
+                        <input class="form-control" name="field16" type="email" placeholder="Enter Email">
                       </div>
 
                       <div class="col-md-6">
                         <label><strong>Address for Communication (With Pincode)</strong></label>
-                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
+                        <input class="form-control" name="field17" type="text" placeholder="Enter Address">
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-5">
                         <label><strong>Permanent Address (With Pincode)</strong></label>
-                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
+                        <input class="form-control" name="field18" type="text" placeholder="Enter Address">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Contact No. - Mobile</strong> </label>
-                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone" pattern="[0-9]{10}" required>
+                        <input class="form-control" name="field19" type="tel" placeholder="Enter Phone" pattern="[0-9]{10}">
                       </div>
                       <div class="col-md-4">
                         <label><strong>Contact No. - Landline (Area Code)</strong></label>
-                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone">
+                        <input class="form-control" name="field20" type="tel" placeholder="Enter Phone">
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-5">
                         <label><small style="font-weight: 600;">Contact Person's Name ( In case of emergency )</small></label>
-                        <input class="form-control" name="afc" type="text" placeholder="Enter Address">
+                        <input class="form-control" name="field21" type="text" placeholder="Enter Address">
                       </div>
                       <div class="col-md-2">
                         <label><strong>Relation</strong></label>
-                        <input class="form-control" name="field10" type="text" placeholder="Relation">
+                        <input class="form-control" name="field22" type="text" placeholder="Relation">
                       </div>
                       <div class="col-md-5">
                         <label><strong>Contact No. - (In case of emergency)</strong></label>
-                        <input class="form-control" name="field10" type="tel" placeholder="Enter Phone">
+                        <input class="form-control" name="field23" type="tel" placeholder="Enter Phone">
                       </div>
                     </div>
                   </div>
@@ -339,7 +514,7 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>Blood Group</strong></label>
-                        <select name="blood_group" class="form-select" required>
+                        <select name="field24" class="form-select">
                           <option value="" disabled selected>Select Blood Group</option>
                           <option value="A+">A+</option>
                           <option value="A-">A-</option>
@@ -353,40 +528,39 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                       </div>
                       <div class="col-md-3">
                         <label><strong>Qualification</strong> </label>
-                        <input type="text" name="qualification" class="form-control" required>
+                        <input type="text" name="field25" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Specialization</strong> </label>
-                        <input type="text" name="specialization" class="form-control" required>
+                        <input type="text" name="field26" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Certification (if any)</strong></label>
-                        <input type="text" name="certification" class="form-control">
+                        <input type="text" name="field27" class="form-control">
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-4">
                         <label><strong>Previous Company Worked in</strong> </label>
-                        <input type="text" name="previous_company" class="form-control">
+                        <input type="text" name="field28" class="form-control">
                       </div>
                       <div class="col-md-4">
                         <label><small style="font-weight: 600;">Total Years of Exp. in previous company</small></label>
-                        <input type="text" name="total_years_of_exp" class="form-control">
+                        <input type="text" name="field29" class="form-control">
                       </div>
                       <div class="col-md-4">
                         <label><strong>Total Work Experience</strong></label>
-                        <input type="text" name="total_work_experience" class="form-control">
+                        <input type="text" name="field30" class="form-control">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-
               <!-- bank details -->
               <div class="accordion-item border mb-2">
                 <h2 class="accordion-header" id="panelsStayOpen-headingAddress">
-                  <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseAddress" aria-expanded="false" aria-controls="panelsStayOpen-collapseAddress" style="background-color:#e3dfde;color:black;">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseAddress" aria-expanded="false" aria-controls="panelsStayOpen-collapseAddress" style="background-color:#e3dfde;color:black;">
                     Bank Details
                   </button>
                 </h2>
@@ -395,15 +569,15 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-4">
                         <label><strong>Bank Account No.</strong></label>
-                        <input type="text" name="bank_account_no" class="form-control">
+                        <input type="text" name="field31" class="form-control">
                       </div>
                       <div class="col-md-4">
                         <label><strong>Bank Name</strong></label>
-                        <input type="text" name="bank_name" class="form-control">
+                        <input type="text" name="field32" class="form-control">
                       </div>
                       <div class="col-md-4">
                         <label><strong>Bank Branch</strong></label>
-                        <input type="text" name="bank_branch" class="form-control">
+                        <input type="text" name="field33" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -422,33 +596,33 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>PAN No.</strong> </label>
-                        <input type="text" name="pan_no" class="form-control" required>
+                        <input type="text" name="field34" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Driving License No.</strong> </label>
-                        <input type="text" name="driving_license_no" class="form-control" required>
+                        <input type="text" name="field35" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>PF No.</strong></label>
-                        <input type="text" name="pf_no" class="form-control">
+                        <input type="text" name="field36" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Passport No.</strong></label>
-                        <input type="text" name="passport_no" class="form-control">
+                        <input type="text" name="field37" class="form-control">
                       </div>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>Passport Issued at</strong></label>
-                        <input type="time" name="passport_issued_at" class="form-control">
+                        <input type="text" name="field38" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Passport Issued Date</strong></label>
-                        <input type="date" name="passport_issued_date" class="form-control">
+                        <input type="date" name="field39" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Passport Expired Date</strong></label>
-                        <input type="date" name="passport_expired_date" class="form-control">
+                        <input type="date" name="field40" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -468,15 +642,15 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                     <div class="row mb-4">
                       <div class="col-md-3">
                         <label><strong>Father's Name</strong> </label>
-                        <input type="text" name="father_name" class="form-control" required>
+                        <input type="text" name="field41" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Mother's Name</strong> </label>
-                        <input type="text" name="mother_name" class="form-control" required>
+                        <input type="text" name="field42" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Marital Status</strong> </label>
-                        <select name="marital_status" class="form-select" required>
+                        <select name="field43" class="form-select" onchange="toggleSpouseAndChildren()">
                           <option value="" disabled selected>Select Marital Status</option>
                           <option value="single">Single</option>
                           <option value="married">Married</option>
@@ -484,72 +658,72 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                           <option value="widowed">Widowed</option>
                         </select>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-3" id="spouseName" style="display:none;">
                         <label><strong>Spouse's Name</strong></label>
-                        <input type="text" name="pf_no" class="form-control">
+                        <input type="text" name="field44" class="form-control">
                       </div>
-
                     </div>
-                    <div class="row mb-4">
+
+                    <div class="row mb-4" id="childrenInfo" style="display:none;">
                       <div class="col-md-3">
                         <label><strong>Child Name 1</strong></label>
-                        <input type="text" name="passport_no" class="form-control">
+                        <input type="text" name="field45" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Gender</strong> </label>
                         <div>
                           <label>
-                            <input type="radio" name="gender" value="male" required> Male
+                            <input type="radio" name="field49" value="male"> Male
                           </label>
                           <label>
-                            <input type="radio" name="gender" value="female" required> Female
+                            <input type="radio" name="field49" value="female"> Female
                           </label>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <label><strong>Child Name 2</strong></label>
-                        <input type="text" name="child_name_2" class="form-control">
+                        <input type="text" name="field46" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Gender</strong> </label>
                         <div>
                           <label>
-                            <input type="radio" name="gender" value="male" required> Male
+                            <input type="radio" name="field50" value="male"> Male
                           </label>
                           <label>
-                            <input type="radio" name="gender" value="female" required> Female
+                            <input type="radio" name="field50" value="female"> Female
                           </label>
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-4" id="childrenInfo" style="display:none;">
                       <div class="col-md-3">
                         <label><strong>Child Name 3</strong></label>
-                        <input type="text" name="passport_no" class="form-control">
+                        <input type="text" name="field47" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Gender</strong> </label>
                         <div>
                           <label>
-                            <input type="radio" name="gender" value="male" required> Male
+                            <input type="radio" name="field51" value="male"> Male
                           </label>
                           <label>
-                            <input type="radio" name="gender" value="female" required> Female
+                            <input type="radio" name="field51" value="female"> Female
                           </label>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <label><strong>Child Name 4</strong></label>
-                        <input type="text" name="child_name_2" class="form-control">
+                        <input type="text" name="field48" class="form-control">
                       </div>
                       <div class="col-md-3">
                         <label><strong>Gender</strong> </label>
                         <div>
                           <label>
-                            <input type="radio" name="gender" value="male" required> Male
+                            <input type="radio" name="field52" value="male"> Male
                           </label>
                           <label>
-                            <input type="radio" name="gender" value="female" required> Female
+                            <input type="radio" name="field52" value="female"> Female
                           </label>
                         </div>
                       </div>
@@ -557,9 +731,7 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
                   </div>
                 </div>
               </div>
-              <!-- additional info 02 ends -->
-
-
+              <!-- additional info 03 ends -->
             </div>
           </div>
       </div>
@@ -570,7 +742,7 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
             <!-- <button type="button" class="btn btn-md btn-danger">Close</button> -->
           </div>
           <div class="col-md-1">
-            <button class="btn  btn-md btn-success me-3" type="submit" name="submit" value="submit" onclick="matchPassword()">Save</button>
+            <button class="btn  btn-md btn-success me-3" type="submit" name="submit" value="submit" onclick="matchPassword()">Submit</button>
           </div>
           <div class="col-md-5"></div>
         </div>
@@ -581,56 +753,59 @@ $wlvd12 = $sql12->fetchAll(PDO::FETCH_OBJ);
 </div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var preselectedCountry = document.querySelector('select[name="field11"]').value;
-    showState(preselectedCountry);
+  document.getElementById("formID").addEventListener("submit", (e) => {
+    if (!confirm("Are you sure ?")) {
+      e.preventDefault();
+    }
+  })
+</script>
+<script>
+  $(document).ready(function() {
+    // Initially hide all select fields
+    $("#gmDiv, #dgmDiv, #rsmDiv, #asmDiv, #tsmDiv").hide();
+
+    $("#designationSelect").change(function() {
+      var selectedRole = $(this).val();
+
+      // Hide all dropdowns initially
+      $("#gmDiv, #dgmDiv, #rsmDiv, #asmDiv, #tsmDiv").hide();
+
+      if (selectedRole === "General Manger") {
+        // If GM is selected, show nothing below
+      } else if (selectedRole === "Deputy General Manager") {
+        $("#gmDiv").show();
+      } else if (selectedRole === "Regional Sales Manager") {
+        $("#gmDiv, #dgmDiv").show();
+      } else if (selectedRole === "Area Sales Manager") {
+        $("#gmDiv, #dgmDiv, #rsmDiv").show();
+      } else if (selectedRole === "Territory Sales Manager") {
+        $("#gmDiv, #dgmDiv, #rsmDiv, #asmDiv").show();
+      } else if (selectedRole === "Sales Officer") {
+        // Show all dropdowns when Sales Officer is selected
+        $("#gmDiv, #dgmDiv, #rsmDiv, #asmDiv, #tsmDiv").show();
+      }
+    });
   });
+</script>
 
-  function showState(str) {
-    if (str == "") {
-      document.getElementById("relatedState").innerHTML = "";
-      return;
+<script>
+  function toggleSpouseAndChildren() {
+    var maritalStatus = document.querySelector('select[name="field43"]').value;
+    var spouseDiv = document.getElementById("spouseName");
+    var childrenDiv = document.getElementById("childrenInfo");
+
+    if (maritalStatus === "single") {
+      spouseDiv.style.display = "none";
+      childrenDiv.style.display = "none";
+    } else if (maritalStatus === "divorced") {
+      spouseDiv.style.display = "none";
+      childrenDiv.style.display = "block"; // Show children inputs
+    } else {
+      spouseDiv.style.display = "block"; // Show spouse input for married and widowed
+      childrenDiv.style.display = "block"; // Show children inputs
     }
-
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      document.getElementById("relatedState").innerHTML = this.responseText;
-    }
-    xhttp.open("GET", "controllers/ajax/show-state.php?q=" + str, true);
-    xhttp.send();
-  }
-
-
-  function showCity(str) {
-    if (str == "") {
-      document.getElementById("relatedCity").innerHTML = "";
-      return;
-    }
-
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      document.getElementById("relatedCity").innerHTML = this.responseText;
-    }
-    xhttp.open("GET", "controllers/ajax/show-city.php?q=" + str, true);
-    xhttp.send();
-  }
-
-
-  function showCityZone(str) {
-    if (str == "") {
-      document.getElementById("cityZone").innerHTML = "";
-      return;
-    }
-
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      document.getElementById("cityZone").innerHTML = this.responseText;
-    }
-    xhttp.open("GET", "controllers/ajax/city-zone.php?q=" + str, true);
-    xhttp.send();
   }
 </script>

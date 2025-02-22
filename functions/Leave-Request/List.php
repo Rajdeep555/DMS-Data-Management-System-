@@ -75,6 +75,7 @@ if (isset($_GET['sid'])) {
                                 <th scope="col">Id</th>
                                 <th scope="col" style="white-space: nowrap;">Employee Name & ID</th>
                                 <th scope="col">Image</th>
+                                <th scope="col">Type</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">From - To</th>
@@ -103,7 +104,7 @@ if (isset($_GET['sid'])) {
                                     $field5 = $rows->leave_document;
                                     $field6 = $rows->date_from;
                                     $field7 = $rows->date_to;
-
+                                    $field8 = $rows->leave_type;
                                     // Check title and description length
                                     $titleWords = explode(' ', $field3);
                                     $descriptionWords = explode(' ', $field4);
@@ -116,6 +117,9 @@ if (isset($_GET['sid'])) {
                                             <a href="index.php?module=Image-View&view=Image&id=<?php echo $field1; ?>">
                                                 View
                                             </a>
+                                        </td>
+                                        <td>
+                                            <?php echo $field8; ?>
                                         </td>
                                         <td>
                                             <?php echo $showMore ? implode(' ', array_slice($titleWords, 0, 1)) . '... <a href="#" data-toggle="modal" data-target="#modal' . $field1 . '">Show more</a>' : $field3; ?>
@@ -134,7 +138,7 @@ if (isset($_GET['sid'])) {
                                                 <p>Accepting...</p>
                                             </div>
                                             <div style="display: flex; justify-content: center; align-items: baseline; gap: 7px;">
-                                                <a id="acceptLeaveBtn<?php echo $field1; ?>" onclick="acceptLeave(<?php echo $field1; ?>, this)" data-toggle="tooltip" title="Accept">
+                                                <a id="acceptLeaveBtn<?php echo $field1; ?>" onclick="acceptLeave(<?php echo $field1; ?>, '<?php echo $field2; ?>', '<?php echo $field8; ?>', '<?php echo $field6; ?>', '<?php echo $field7; ?>', this)" data-toggle="tooltip" title="Accept">
                                                     <i class="material-icons" style="font-size:18px; color:green; margin-left: 2px; cursor:pointer;">check_circle</i>
                                                 </a>
                                                 <a href="#" onclick="rejectLeave(<?php echo $field1; ?>, this)" data-toggle="tooltip" title="Reject">
@@ -216,50 +220,101 @@ if (isset($_GET['sid'])) {
         });
     });
 
-    function acceptLeave(id, button) {
-        // Disable the button to prevent multiple clicks
-        button.onclick = null; // Remove the click event
-        button.style.pointerEvents = 'none'; // Disable pointer events
-        button.style.opacity = '0.5'; // Optional: change opacity to indicate it's disabled
+    //accept leave
 
-        // Start AJAX request
+    function acceptLeave(id, employeeId, leaveType, dateFrom, dateTo, button) {
+        console.log("Accept Leave Parameters:", {
+            id,
+            employeeId,
+            leaveType,
+            dateFrom,
+            dateTo
+        });
+
+        // Disable the button to prevent multiple clicks
+        button.disabled = true;
+        button.style.pointerEvents = 'none';
+        button.style.opacity = '0.5';
+
+        // Start AJAX request to accept leave
         $.ajax({
             url: './APIs/Accept-Leave.php',
             type: 'POST',
             data: {
                 id: id
             },
+            dataType: 'json', // Ensure the response is parsed as JSON
             success: function(response) {
-                // Show success alert
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: "Leave accepted successfully",
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload(); // Reload the page
-                    }
-                });
+                console.log("Leave accepted response:", response);
+
+                if (response.status === "success") {
+                    // Show success message
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: "Leave accepted successfully!",
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Proceed to update leave_report after successful acceptance
+                        updateLeaveReport(employeeId, leaveType, dateFrom, dateTo, button);
+                    });
+                } else {
+                    throw new Error(response.message || "Failed to accept leave.");
+                }
             },
             error: function(xhr, status, error) {
-                // Show error alert
+                console.error("Error accepting leave:", xhr.responseText || error);
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Something went wrong, please try again"
+                    text: "Something went wrong, please try again."
                 });
-            },
-            complete: function() {
-                // Re-enable the button after the request completes
-                button.onclick = function() {
-                    acceptLeave(id, button);
-                }; // Restore click event
-                button.style.pointerEvents = 'auto'; // Re-enable pointer events
-                button.style.opacity = '1'; // Restore opacity
+
+                // Re-enable button on failure
+                restoreButtonState(button);
             }
         });
     }
+
+    // Function to update leave report after leave is accepted
+    function updateLeaveReport(employeeId, leaveType, dateFrom, dateTo, button) {
+        console.log("Updating leave report for:", {
+            employeeId,
+            leaveType,
+            dateFrom,
+            dateTo
+        });
+
+        $.ajax({
+            url: './APIs/Update-Leave-Report.php',
+            type: 'POST',
+            data: {
+                employee_id: employeeId, // Ensure this is correctly formatted
+                leave_type: leaveType,
+                date_from: dateFrom,
+                date_to: dateTo
+            },
+            dataType: 'json',
+            success: function(updateResponse) {
+                console.log("Leave report updated response:", updateResponse);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error updating leave report:", xhr.responseText || error);
+            }
+        });
+
+    }
+
+    // Function to restore button state on failure
+    function restoreButtonState(button) {
+        button.disabled = false;
+        button.style.pointerEvents = 'auto';
+        button.style.opacity = '1';
+    }
+
+
+
+    //ends
 
     function rejectLeave(id, button) {
         // Disable the button to prevent multiple clicks

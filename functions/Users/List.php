@@ -146,7 +146,7 @@ if (isset($_GET['sid'])) {
                 $field3 = $rows->user_mname;
                 $field4 = $rows->user_lname;
                 $field5 = $rows->user_phone;
-                $field6 = $rows->user_email;
+                $field6 = $rows->official_email;
                 $field7 = $rows->user_role;
                 // Split the user role into words
                 $words = explode(" ", $field7);
@@ -202,7 +202,7 @@ if (isset($_GET['sid'])) {
                             <h6 class="heading1"> <i class="material-icons" style="font-size:10px;color:#7366ff;">call</i> <?php echo $rows->user_phone; ?></h6>
                           </div>
                           <div class="col-md-12">
-                            <h6 class="heading1" style="color: blue;"> <i class="material-icons" style="font-size:10px;color:#7366ff;">email</i> <?php echo $rows->user_email; ?></h6>
+                            <h6 class="heading1" style="color: blue;"> <i class="material-icons" style="font-size:10px;color:#7366ff;">email</i> <?php echo $rows->official_email; ?></h6>
                           </div>
                           <div class="col-md-12">
                             <h6 class="heading1"><i class="material-icons" style="font-size:10px;color:#7366ff;">account_circle</i></span> <?php echo $rows->user_role; ?></h6>

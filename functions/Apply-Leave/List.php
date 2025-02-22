@@ -5,6 +5,14 @@ $redirection_page = "index.php?module=Apply-Leave&view=List";
 $action_name = "module=Apply-Leave&view=List";
 
 
+$user_id = $_SESSION['user_id'];
+$get_employee_id = "SELECT user_unique_id FROM users WHERE id = '$user_id'";
+$sql = $dbconn->prepare($get_employee_id);
+$sql->execute();
+$employee_id = $sql->fetchColumn();
+
+
+
 
 // For Displaying the table
 
@@ -30,8 +38,7 @@ $total_pages = ceil($total_rows / $no_of_records_per_page);
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 $date_filter = isset($_GET['date']) ? $_GET['date'] : '';
 
-$select_enquiry = "SELECT * FROM `$table_name` WHERE status = 'Active'";
-
+$select_enquiry = "SELECT * FROM `$table_name` WHERE status = 'Active' AND employee_id = '$employee_id'";
 if ($status_filter) {
     $select_enquiry .= " AND leave_status = :status";
 }

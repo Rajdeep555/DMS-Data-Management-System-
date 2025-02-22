@@ -7,6 +7,22 @@ $table_name = 'salary_details';
 $redirection_page = "index.php?module=Salaries&view=List";
 $action_name = "module=Salaries&view=List";
 
+$user_role = $_SESSION['user_role'];
+$user_unique_id = $_SESSION['user_id'];
+
+// echo $user_unique_id;
+
+$select_user = "SELECT * FROM `users` where status = 'Active' and id = '$user_unique_id'";
+$sql_user = $dbconn->prepare($select_user);
+$sql_user->execute();
+$user_data = $sql_user->fetchAll(PDO::FETCH_OBJ);
+
+foreach ($user_data as $user) {
+    $employee_id = $user->user_unique_id;
+}
+
+// echo $user_role;
+
 // For Displaying the table
 
 if (isset($_GET['pageno'])) {
@@ -14,17 +30,18 @@ if (isset($_GET['pageno'])) {
 } else {
     $pageno = 1;
 }
+
 $no_of_records_per_page = 50;
 $offset = ($pageno - 1) * $no_of_records_per_page;
 
-$select_enquiry = "SELECT * FROM `$table_name` where status = 'Active' order by id desc";
+$select_enquiry = "SELECT * FROM `$table_name` where status = 'Active' " . ($user_role !== 'Admin' ? "AND employee_id = '$employee_id' " : "") . "order by id desc";
 $sql = $dbconn->prepare($select_enquiry);
 $sql->execute();
 
 $total_rows = $sql->fetchColumn();
 $total_pages = ceil($total_rows / $no_of_records_per_page);
 
-$select_enquiry = "SELECT * FROM `$table_name` where status = 'Active' order by id desc LIMIT $offset, $no_of_records_per_page";
+$select_enquiry = "SELECT * FROM `$table_name` where status = 'Active' " . ($user_role !== 'Admin' ? "AND employee_id = '$employee_id' " : "") . "order by id desc LIMIT $offset, $no_of_records_per_page";
 $sql = $dbconn->prepare($select_enquiry);
 $sql->execute();
 $wlvd = $sql->fetchAll(PDO::FETCH_OBJ);
@@ -121,7 +138,7 @@ if (isset($_GET['sid'])) {
                                 <select class="form-control" id="designation_filter">
                                     <option value="">Select Designation</option>
                                     <?php
-                                    $select_designation = "SELECT DISTINCT user_role FROM users WHERE status='Active' AND user_role != 'Admin'";
+                                    $select_designation = "SELECT DISTINCT user_role FROM users WHERE status='Active'" . ($user_role !== 'Admin' ? " AND user_role = '$user_role'" : "") . "";
                                     $stmt = $dbconn->prepare($select_designation);
                                     $stmt->execute();
                                     $designations = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -157,15 +174,15 @@ if (isset($_GET['sid'])) {
                                     <option value="">Select Month</option>
                                     <?php
                                     $months = array(
-                                        "01" => "January",
-                                        "02" => "February",
-                                        "03" => "March",
-                                        "04" => "April",
-                                        "05" => "May",
-                                        "06" => "June",
-                                        "07" => "July",
-                                        "08" => "August",
-                                        "09" => "September",
+                                        "1" => "January",
+                                        "2" => "February",
+                                        "3" => "March",
+                                        "4" => "April",
+                                        "5" => "May",
+                                        "6" => "June",
+                                        "7" => "July",
+                                        "8" => "August",
+                                        "9" => "September",
                                         "10" => "October",
                                         "11" => "November",
                                         "12" => "December"
